@@ -42,21 +42,29 @@ async function main() {
     console.log(getHomophones(word.pronunciations[0].ipa))
     console.timeEnd();
 
-    const tags = {};
-    for (const w of data)
-        if (w.pronunciations[0])
-            for (const pro of w.pronunciations)
-                if (pro.tags)
-                    for (const tag of pro.tags) {
-                        if (!tags[tag]) tags[tag] = 0;
-                        tags[tag]++;
-                    }
+    const mainTags = ['UK', 'US', 'General-American', 'Received-Pronunciation'];
+    const secondarytags = ['Canada', 'Australia', 'British'];
 
-    console.log(tags)
+    const wordMainPronunciations = word.pronunciations.filter(pron => pron.tags?.some(tag => mainTags.includes(tag)));
+    console.log(wordMainPronunciations)
+
+    const wordOtherPronunciations = word.pronunciations.filter(pron => pron.tags?.some(tag => secondarytags.includes(tag)));
+    console.log(wordOtherPronunciations)
 }
 
 // UK, US, "General-American", "Received-Pronunciation", Canada, Australia, British
 
+//========Calcul nombre de tags========
+// const tags = {};
+// for (const w of data)
+//     if (w.pronunciations[0])
+//         for (const pro of w.pronunciations)
+//             if (pro.tags)
+//                 for (const tag of pro.tags) {
+//                     if (!tags[tag]) tags[tag] = 0;
+//                     tags[tag]++;
+//                 }
+// console.log(tags)
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
