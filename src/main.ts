@@ -1,33 +1,26 @@
 async function main() {
-    const data = await fetch('./dicotags.json').then(res => res.json());
+    const data: Word[] = await fetch('./src/assets/dicotags.json').then(res => res.json());
 
     const getGameObject = async () => {
 
-        const getRandomWord = async () => await fetch('https://random-word-api.herokuapp.com/word?diff=' + Math.floor(Math.random() * 3 + 1)).then(res => res.json()).then(async data => {
+        const getRandomWord = async (): Promise<string> => await fetch('https://random-word-api.herokuapp.com/word?diff=' + Math.floor(Math.random() * 3 + 1)).then(res => res.json()).then(async data => {
             return data[0];
         });
 
-        const searchWord = searchedWord => {
-            for (const w of data) {
-                if (w.word == searchedWord) return w;
-            }
-        };
-
-        const getWordObject = async () => {
-            let wordObject;
+        const getWord = async (): Promise<Word> => {
+            let wordObject: Word | undefined;
             while (!wordObject) {
                 const wordString = await getRandomWord();
-                wordObject = searchWord(wordString);
-                // if (!wordObject) console.log(wordString)
+                wordObject = data.find(w => w.word === wordString);
             }
             return wordObject;
         };
 
-        const selectPronunciation = w => {
+        const selectPronunciation = (w: Word): Pronunciation => {
             const mainTags = ['UK', 'US', 'General-American', 'Received-Pronunciation', 'Standard'];
             const secondarytags = ['Canada', 'Australia', 'British', 'Southern', 'New-Zealand', 'Ireland', 'Scotland', 'Wales', 'Northern-Ireland'];
 
-            const randomElement = arr => { return arr[Math.floor(Math.random() * arr.length)] };
+            const randomElement = (arr: Pronunciation[]) => { return arr[Math.floor(Math.random() * arr.length)] };
 
             const wordMainPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => mainTags.includes(tag)));
             if (wordMainPronunciations.length) return randomElement(wordMainPronunciations);
@@ -36,34 +29,37 @@ async function main() {
             if (wordOtherPronunciations.length) return randomElement(wordOtherPronunciations);
 
             const noTags = w.pronunciations.filter(pron => !pron.tags);
-            return randomElement(noTags);
+            if (noTags.length) return randomElement(noTags);
+
+            return randomElement(w.pronunciations);
         };
 
-        const getHomophones = ipa => {
-            const list = [];
+        const getHomophones = (ipa: string) => {
+            const list: Word[] = [];
             for (const w of data)
                 for (const pron of w.pronunciations)
-                    if (pron.ipa == ipa && !list.includes(w)) list.push(w); //or w.word? (only the word or are the meanings needed?)
+                    if (pron.ipa == ipa && !list.includes(w)) list.push(w);
             return list;
         };
 
-        const word = await Promise.any([getWordObject(), getWordObject(), getWordObject(), getWordObject(), getWordObject(), getWordObject(), getWordObject(), getWordObject(), getWordObject(), getWordObject()]);
+        const word = await Promise.any([getWord(), getWord(), getWord(), getWord(), getWord(), getWord(), getWord(), getWord(), getWord(), getWord()]);
         const pronunciation = selectPronunciation(word);
         const homophones = getHomophones(pronunciation.ipa);
 
-        const ret = {};
-        ret.pronunciation = pronunciation;
-        ret.words = homophones;
+        const ret: GameObject = {
+            pronunciation: pronunciation,
+            words: homophones,
+        };
         return ret;
     }
 
-    const gameObject = await getGameObject();
+    const gameObject: GameObject = await getGameObject();
     console.log(gameObject);
 
     const dom = {
-        label: document.querySelector('label'),
-        input: document.getElementById('input'),
-        btn: document.querySelector('button'),
+        label: document.querySelector('label') as HTMLLabelElement,
+        input: document.getElementById('input') as HTMLInputElement,
+        btn: document.querySelector('button') as HTMLButtonElement,
     };
 
     dom.label.textContent = gameObject.pronunciation.ipa;
@@ -73,8 +69,8 @@ async function main() {
         const input = dom.input.value.trim();
         if (gameObject.words.some(w => w.word == input)) alert('gg')
     });
-dom.input.value='';
-dom.input.focus();
+    dom.input.value = '';
+    dom.input.focus();
 }
 
 //========Calcul nombre de tags========
@@ -91,4 +87,19 @@ dom.input.focus();
 
 main();
 
-blood 
+interface Pronunciation {
+    ipa: string;
+    tags?: string[];
+    note?: string[];
+}
+
+interface Word {
+    word: string;
+    pronunciations: Pronunciation[];
+    meanings: string[];
+}
+
+interface GameObject {
+    pronunciation: Pronunciation;
+    words: Word[];
+}

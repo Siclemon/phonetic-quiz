@@ -1,0 +1,5 @@
+body {
+  background-color: oklch(5% 0.02 150);
+  color: oklch(98% 0.04 150);
+  font-family: Arial, Helvetica, sans-serif;
+}
