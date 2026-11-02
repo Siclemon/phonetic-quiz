@@ -1,10 +1,11 @@
 import type { Pronunciation, Word, GameObject } from './interfaces.ts';
-import { showAnswers } from './dom.ts';
+import { showAnswers } from './ui.ts';
 import { getGameObject } from './game.ts';
 
 async function main() {
-    const data: Word[] = await fetch('./src/assets/dicotags.json').then(res => res.json());
-    const gameObjects: GameObject[] = await Promise.all(Array.from({ length: 2 }, () => getGameObject(data)));
+    const dictionary: Word[] = await fetch('./src/assets/dicotags.json').then(res => res.json());
+    const wordsList: string[] = await fetch('./src/assets/english-words.json').then(res => res.json());
+    const gameObjects: GameObject[] = Array.from({ length: 2 }, () => getGameObject(dictionary, wordsList));
     console.log(gameObjects)
     
     const dom = {
@@ -27,7 +28,7 @@ async function main() {
             showAnswers(gameObjects[0]);
             document.getElementById('meaning-0')?.click();
             gameObjects.shift();
-            gameObjects.push(await getGameObject(data));
+            gameObjects.push(getGameObject(dictionary, wordsList));
             dom.btn.textContent = "➡️";
             
         } else {

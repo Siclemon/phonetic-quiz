@@ -23,7 +23,7 @@ function showAnswer(word: Word, index: number) {
     olM.id = 'olM' + index;
     olM.classList = 'hidden';
     art.appendChild(olM);
-    
+
     const olP = document.createElement('ol') as HTMLOListElement;
     for (const pron of word.pronunciations) {
         const li = document.createElement('li') as HTMLLIElement;
@@ -38,7 +38,7 @@ function showAnswer(word: Word, index: number) {
                 tagSpan.textContent = tag;
                 lidiv.appendChild(tagSpan);
             }
-            li.appendChild(lidiv)
+        li.appendChild(lidiv)
         olP.appendChild(li);
     }
     olP.id = 'olP' + index;
@@ -50,30 +50,25 @@ function showAnswer(word: Word, index: number) {
 
 function createButtons(index: number): HTMLElement {
     const div = document.createElement('div');
-    div.classList = 'buttons';
+    div.classList.add('buttons');
 
-    const labelM = document.createElement('label') as HTMLLabelElement;
-    labelM.htmlFor = 'meaning-' + index;
-    const inpM = document.createElement('input') as HTMLInputElement;
-    inpM.type = 'checkbox';
-    inpM.id = 'meaning-' + index;
-    labelM.textContent = 'meaning';
-    labelM.appendChild(inpM);
-    inpM.addEventListener('click', () => showWordInfo('meaning', index));
-    
-    const labelP = document.createElement('label') as HTMLLabelElement;
-    labelP.htmlFor = 'pronunciation-' + index;
-    const inpP = document.createElement('input') as HTMLInputElement;
-    inpP.type = 'checkbox';
-    inpP.id = 'pronunciation-' + index;
-    labelP.textContent = 'pronunciation';
-    labelP.appendChild(inpP);
-    inpP.addEventListener('click', () => showWordInfo('pronunciation', index));
-
-    div.appendChild(labelM);
-    div.appendChild(labelP);
+    div.appendChild(createButton('meaning', index));
+    div.appendChild(createButton('pronunciation', index));
 
     return div;
+}
+
+function createButton(type: string, index: number): HTMLLabelElement {
+    const label = document.createElement('label') as HTMLLabelElement;
+    label.htmlFor = `${type}-${index}`;
+    label.textContent = type;
+    const inp = document.createElement('input') as HTMLInputElement;
+    inp.type = 'checkbox';
+    inp.id = `${type}-${index}`;
+    inp.addEventListener('click', () => showWordInfo(type, index));
+    label.appendChild(inp);
+
+    return label;
 }
 
 function showWordInfo(thing: string, index: number) {
