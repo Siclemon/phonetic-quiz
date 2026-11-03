@@ -1,51 +1,41 @@
-import type { Pronunciation, Word, GameObject } from './interfaces.ts';
-import { showAnswers } from './ui.ts';
-import { getGameObject } from './game.ts';
+import type { Word, GameObject } from './types/interfaces.ts';
+import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm } from './ui/ui.ts';
+import { getGameObject, isCorrect } from './game.ts';
+import { showAnswers, clearAnswers } from './ui/answers.ts';
 
 async function main() {
     const dictionary: Word[] = await fetch('./src/assets/dicotags.json').then(res => res.json());
     const wordsList: string[] = await fetch('./src/assets/english-words.json').then(res => res.json());
-    const gameObjects: GameObject[] = Array.from({ length: 2 }, () => getGameObject(dictionary, wordsList));
-    console.log(gameObjects)
-    
-    const dom = {
-        label: document.querySelector('label') as HTMLLabelElement,
-        input: document.getElementById('input') as HTMLInputElement,
-        btn: document.querySelector('button') as HTMLButtonElement,
-    };
 
-    setupForm(gameObjects[0], dom.input, dom.label);
+    let gameObject: GameObject = getGameObject(dictionary, wordsList);
 
-    let btn: boolean = true;
-    
-    dom.btn.addEventListener('click', async e => {
+    const label = document.querySelector('label') as HTMLLabelElement;
+    const input = document.getElementById('input') as HTMLInputElement;
+    const btn = document.querySelector('button') as HTMLButtonElement;
+
+
+    setupForm(gameObject, input, label);
+
+    let guessing: boolean = true;
+
+    btn.addEventListener('click', e => {
         e.preventDefault();
 
-        if (btn) {
-            const input = dom.input.value.trim().toLowerCase();
-            if (gameObjects[0].words.some(w => w.word === input)) dom.input.style.borderColor = 'green';
-            else dom.input.style.borderColor = 'red';
-            showAnswers(gameObjects[0]);
-            document.getElementById('meaning-0')?.click();
-            gameObjects.shift();
-            gameObjects.push(getGameObject(dictionary, wordsList));
-            dom.btn.textContent = "➡️";
-            
+        if (guessing) {
+            const correct: boolean = isCorrect(gameObject, input.value);
+            answerFeedback(correct, input);
+            showAnswers(gameObject);
+            showFirstMeanings();
+            gameObject = getGameObject(dictionary, wordsList);
         } else {
-            setupForm(gameObjects[0], dom.input, dom.label);
-            document.querySelectorAll('article').forEach(art => art.remove());
-            document.querySelector('header.answers__header')!.textContent = '';
-            dom.btn.textContent = "🪶";
+            setupForm(gameObject, input, label);
+            clearAnswers();
         }
 
-        btn = !btn;
+        guessing = !guessing;
+        updateButtonContent(guessing, btn);
     });
 }
 
-function setupForm(gameObject: GameObject, input: HTMLInputElement, label: HTMLLabelElement) {
-    input.value = '';
-    input.focus();
-    label.textContent = gameObject.pronunciation.ipa;
-}
 
 main();

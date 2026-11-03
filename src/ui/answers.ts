@@ -1,10 +1,10 @@
-import type { Word, GameObject } from './interfaces.ts';
+import type { Word, GameObject } from '../types/interfaces.ts';
 
 export function showAnswers(gameObject: GameObject) {
     for (const answer of gameObject.words)
         showAnswer(answer, gameObject.words.indexOf(answer));
     const header = document.querySelector('header.answers__header') as HTMLElement;
-    header.textContent = gameObject.words.length + ' answer' + (gameObject.words.length > 1 ? 's' : '') + ':';
+    header.textContent = `${gameObject.words.length} answer${gameObject.words.length > 1 ? 's' : ''}:`;
 }
 
 function showAnswer(word: Word, index: number) {
@@ -13,18 +13,26 @@ function showAnswer(word: Word, index: number) {
     header.textContent = word.word;
 
     art.appendChild(createButtons(index));
+    art.appendChild(createMeaningsList(word, index));
+    art.appendChild(createPronunciationsList(word, index));
 
-    const olM = document.createElement('ol') as HTMLOListElement;
+    document.querySelector('section')?.appendChild(art);
+}
+
+function createMeaningsList(word: Word, index: number): HTMLOListElement {
+    const ol = document.createElement('ol') as HTMLOListElement;
     for (const meaning of word.meanings) {
         const li = document.createElement('li') as HTMLLIElement;
         li.textContent = meaning;
-        olM.appendChild(li);
+        ol.appendChild(li);
     }
-    olM.id = 'olM' + index;
-    olM.classList = 'hidden';
-    art.appendChild(olM);
+    ol.id = `olM${index}`;
+    ol.classList = 'hidden';
+    return ol;
+}
 
-    const olP = document.createElement('ol') as HTMLOListElement;
+function createPronunciationsList(word: Word, index: number) {
+    const ol = document.createElement('ol') as HTMLOListElement;
     for (const pron of word.pronunciations) {
         const li = document.createElement('li') as HTMLLIElement;
         const lidiv = document.createElement('div') as HTMLElement;
@@ -39,13 +47,11 @@ function showAnswer(word: Word, index: number) {
                 lidiv.appendChild(tagSpan);
             }
         li.appendChild(lidiv)
-        olP.appendChild(li);
+        ol.appendChild(li);
     }
-    olP.id = 'olP' + index;
-    olP.classList = 'hidden';
-    art.appendChild(olP);
-
-    document.querySelector('section')?.appendChild(art);
+    ol.id = `olP${index}`;
+    ol.classList = 'hidden';
+    return ol;
 }
 
 function createButtons(index: number): HTMLElement {
@@ -73,13 +79,18 @@ function createButton(type: string, index: number): HTMLLabelElement {
 
 function showWordInfo(thing: string, index: number) {
     const other = thing === 'meaning' ? 'pronunciation' : 'meaning';
-    const input = document.getElementById(thing + '-' + index) as HTMLInputElement;
+    // const input = document.getElementById(thing + '-' + index) as HTMLInputElement;
     const otherInput = document.getElementById(other + '-' + index) as HTMLInputElement;
     if (otherInput.checked) {
         otherInput.checked = false;
-        const otherList = document.getElementById('ol' + other[0].toUpperCase() + index) as HTMLOListElement;
+        const otherList = document.getElementById(`ol${other[0].toUpperCase()}${index}`) as HTMLOListElement;
         otherList.classList.toggle('hidden');
     };
-    const list = document.getElementById('ol' + thing[0].toUpperCase() + index) as HTMLOListElement;
+    const list = document.getElementById(`ol${thing[0].toUpperCase()}${index}`) as HTMLOListElement;
     list.classList.toggle('hidden');
+}
+
+export function clearAnswers(): void {
+    document.querySelectorAll('article').forEach(art => art.remove());
+    document.querySelector('header.answers__header')!.textContent = '';
 }

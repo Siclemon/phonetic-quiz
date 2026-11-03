@@ -1,4 +1,4 @@
-import type { Pronunciation, Word, GameObject } from './interfaces.ts';
+import type { Pronunciation, Word, GameObject } from './types/interfaces.ts';
 
 export function getGameObject(dictionary: Word[], wordsList: string[]): GameObject {
 
@@ -6,11 +6,11 @@ export function getGameObject(dictionary: Word[], wordsList: string[]): GameObje
     const pronunciation = selectPronunciation(word);
     const homophones = getHomophones(pronunciation.ipa, dictionary);
 
-    const ret: GameObject = {
+    const obj: GameObject = {
         pronunciation: pronunciation,
         words: homophones,
     };
-    return ret;
+    return obj;
 }
 
 function getWord(dictionary: Word[], wordsList: string[]): Word {
@@ -20,17 +20,15 @@ function getWord(dictionary: Word[], wordsList: string[]): Word {
         wordObject = dictionary.find(w => w.word === wordString);
     }
     return wordObject;
-};
+}
 
 function pickRandomWord(wordsList: string[]): string {
-    return wordsList[Math.floor(Math.random() * wordsList.length)];
+    return randomElement(wordsList);
 }
 
 function selectPronunciation(w: Word): Pronunciation {
     const mainTags = ['UK', 'US', 'General-American', 'Received-Pronunciation', 'Standard'];
     const secondarytags = ['Canada', 'Australia', 'British', 'Southern', 'New-Zealand', 'Ireland', 'Scotland', 'Wales', 'Northern-Ireland'];
-
-    const randomElement = (arr: Pronunciation[]) => { return arr[Math.floor(Math.random() * arr.length)] };
 
     const wordMainPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => mainTags.includes(tag)));
     if (wordMainPronunciations.length) return randomElement(wordMainPronunciations);
@@ -42,8 +40,17 @@ function selectPronunciation(w: Word): Pronunciation {
     if (noTags.length) return randomElement(noTags);
 
     return randomElement(w.pronunciations);
-};
+}
 
 function getHomophones(ipa: string, dictionary: Word[]): Word[] {
     return dictionary.filter(w => w.pronunciations.some(pron => pron.ipa === ipa));
-};
+}
+
+function randomElement<T>(arr: T[]) {
+    return arr[Math.floor(Math.random() * arr.length)]
+}
+
+export function isCorrect(gameObject: GameObject, input: string): boolean {
+    input = input.trim().toLowerCase();
+    return gameObject.words.some(w => w.word === input);
+}
