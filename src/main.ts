@@ -4,8 +4,8 @@ import { getGameObject, isCorrect } from './game.ts';
 import { showAnswers, clearAnswers } from './ui/answers.ts';
 
 async function main() {
-    const dictionary: Word[] = await fetch('./src/assets/dictionary.json').then(res => res.json());
-    const wordsList: string[] = await fetch('./src/assets/english-words.json').then(res => res.json());
+    const dictionary: Word[] = await fetch('/phonetic-quiz/dictionary.json').then(res => res.json());
+    const wordsList: string[] = await fetch('/phonetic-quiz/english-words.json').then(res => res.json());
 
     let gameObject: GameObject = getGameObject(dictionary, wordsList);
 
