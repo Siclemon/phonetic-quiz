@@ -38,3 +38,39 @@ jq "[.[]? | {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]
 
 2823314
 2778811
+
+def unique_unsorted:
+reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
+[.[]? | {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique_unsorted, pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null or (.ipa | test(".*-.*")))) | unique_unsorted})
+
+def unique_unsorted:
+reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
+[.[]? 
+| {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] 
+| group_by(.word) 
+| map({
+    word: .[0].word, 
+    meanings: map(.meaning) | flatten | unique_unsorted, 
+    pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null or (.ipa | test(".*-.*")))) | unique_unsorted})
+
+
+---
+regroupe les prononciations par ipa
+```
+def unique_unsorted:
+reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
+
+[.[]? 
+| {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] 
+| group_by(.word) 
+| map({
+    word: .[0].word, 
+    meanings: map(.meaning) | flatten | unique_unsorted, 
+    pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null or (.ipa | test(".*-.*")))) | unique_unsorted
+        | group_by(.ipa) 
+        | map({
+            ipa: .[0].ipa, 
+            tags: map(.tags // []) | flatten,
+            note: map(.note // []) | flatten})
+    })
+```
