@@ -1,7 +1,7 @@
 import type { GameObject } from "../types/interfaces";
 
 export function answerFeedback(correct: boolean, input: HTMLInputElement): void {
-    input.style.borderColor = correct ? 'green' : 'red';
+    input.classList = 'form__input ' + (correct ? 'correct' : 'incorrect');
 }
 
 export function updateButtonContent(guessing: boolean, btn: HTMLButtonElement): void {

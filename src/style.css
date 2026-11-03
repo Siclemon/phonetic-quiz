@@ -2,6 +2,7 @@
 	font-family: charis;
 	src: url(./assets/fonts/CharisSIL-Regular.ttf);
 }
+
 @font-face {
 	font-family: charis boldita;
 	src: url(./assets/fonts/CharisSIL-BoldItalic.ttf);
@@ -14,10 +15,17 @@
 	--font: charis, serif;
 }
 
+.paper {
+	background: url('./assets/paper.png') 0 0;
+	/* background-blend-mode: hard-light; */
+	/* background-blend-mode:lighten; */
+	background-blend-mode: color-burn;
+}
+
 body {
-	background-color: var(--bg-color);
 	color: var(--txt-color);
 	font-family: var(--font);
+	background-color: var(--bg-color) !important;
 
 	main {
 		margin: auto;
@@ -36,6 +44,7 @@ body {
 			.form__label {
 				font-size: 1.3rem;
 				grid-area: lab;
+				letter-spacing: 0.05px;
 			}
 
 			.form__input,
@@ -49,6 +58,20 @@ body {
 			.form__input {
 				border-radius: 3px;
 				grid-area: inp;
+				padding: 2px 3px;
+
+				&.correct {
+					border-color: oklch(55% 0.14 142.5);
+				}
+
+				&.incorrect {
+					border-color: oklch(55% 0.14 22);
+				}
+
+				&:focus {
+					outline: none;
+					border-width: 2px;
+				}
 			}
 
 			.form__button {
@@ -68,12 +91,12 @@ body {
 		}
 
 		article {
-			background: var(--surface-color);
 			padding: 4px;
 			border-radius: 3px;
 			margin-bottom: 12px;
 			padding-bottom: 12px;
 			box-shadow: 1px 1px 5px 1px #0003;
+			background-color: var(--surface-color) !important;
 
 			header {
 				text-align: center;
@@ -89,7 +112,7 @@ body {
 				justify-content: space-around;
 
 				label {
-					background-color: oklch(0.89 0 0);
+					background-color: oklch(0.89 0 0) !important;
 					border-radius: 50px;
 					padding: 3px 0 3px 10px;
 					user-select: none;
@@ -99,7 +122,7 @@ body {
 					}
 
 					&:has(input[type='checkbox']:checked) {
-						background-color: var(--bg-color);
+						background-color: var(--bg-color) !important;
 					}
 				}
 			}
@@ -112,11 +135,11 @@ body {
 
 				li {
 					margin-bottom: 4px;
-					
+
 					div {
 						display: flex;
 						flex-direction: column;
-						
+
 						.tag {
 							align-self: end;
 							margin-top: -4px;
