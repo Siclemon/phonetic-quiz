@@ -1,6 +1,7 @@
-import type { Pronunciation, Word, GameObject } from './types/interfaces.ts';
+import type { Pronunciation, Word, GameObject } from '../types/interfaces.ts';
+import { retrieveFrequencies } from '../game/data.ts';
 
-export function getGameObject(dictionary: Word[], wordsList: string[]): GameObject {
+export function getGameObject(dictionary: Word[], wordsList: string[][]): GameObject {
 
     const word = getWord(dictionary, wordsList);
     const pronunciation = selectPronunciation(word);
@@ -13,7 +14,7 @@ export function getGameObject(dictionary: Word[], wordsList: string[]): GameObje
     return obj;
 }
 
-function getWord(dictionary: Word[], wordsList: string[]): Word {
+function getWord(dictionary: Word[], wordsList: string[][]): Word {
     let wordObject: Word | undefined;
     while (!wordObject) {
         const wordString = pickRandomWord(wordsList);
@@ -22,8 +23,11 @@ function getWord(dictionary: Word[], wordsList: string[]): Word {
     return wordObject;
 }
 
-function pickRandomWord(wordsList: string[]): string {
-    return randomElement(wordsList);
+function pickRandomWord(wordsList: string[][]): string {
+    const frequencies: number[] = retrieveFrequencies();
+    const difficulty = weightedRandom(frequencies);
+    console.log(difficulty)
+    return randomElement(wordsList[difficulty - 1]);
 }
 
 function selectPronunciation(w: Word): Pronunciation {
@@ -46,8 +50,13 @@ function getHomophones(ipa: string, dictionary: Word[]): Word[] {
     return dictionary.filter(w => w.pronunciations.some(pron => pron.ipa === ipa));
 }
 
-function randomElement<T>(arr: T[]) {
+export function randomElement<T>(arr: T[]) {
     return arr[Math.floor(Math.random() * arr.length)]
+}
+
+function weightedRandom(frequencies: number[]): number {
+    const arr = frequencies.flatMap((freq, i) => Array.from({ length: freq * 100 }, () => i + 1));
+    return randomElement(arr);
 }
 
 export function isCorrect(gameObject: GameObject, input: string): boolean {

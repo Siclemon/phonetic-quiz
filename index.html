@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="./src/style.css">
     <script src="./src/main.ts" defer type="module"></script>
 </head>
+
 <body class="paper">
     <main>
         <form action="">
@@ -18,5 +20,28 @@
             <header class="answers__header"></header>
         </section>
     </main>
+    <dialog id="settings">
+        <label for="settings__diff">
+            Difficulty:
+            <output for="settings__diff" id="settings__diff__output"></output>
+            <input type="range" id="settings__diff" min="1" max="8" step="1" value="2">
+        </label>
+        <label for="">
+            Spread:
+            <output for="settings__spread" id="settings__spread__output"></output>
+            <input type="range" id="settings__spread" min="1" max="8" step="1" value="3">
+        </label>
+        <div id="settings__freq__chart">
+            <div><span>1</span></div>
+            <div><span>2</span></div>
+            <div><span>3</span></div>
+            <div><span>4</span></div>
+            <div><span>5</span></div>
+            <div><span>6</span></div>
+            <div><span>7</span></div>
+            <div><span>8</span></div>
+        </div>
+    </dialog>
 </body>
+
 </html>
