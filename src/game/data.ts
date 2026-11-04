@@ -29,5 +29,5 @@ export function saveFrequencies(frequencies: number[]): void {
 }
 
 export function retrieveFrequencies(): number[] {
-    return JSON.parse(window.localStorage.getItem('frequencies') ?? '') || calcFrequenciesArray(2, 5);
+    return JSON.parse(window.localStorage.getItem('frequencies') ?? 'null') || calcFrequenciesArray(2, 5);
 }
