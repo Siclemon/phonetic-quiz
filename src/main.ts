@@ -1,23 +1,25 @@
 import type { Word, GameObject } from './types/interfaces.ts';
 import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm } from './ui/ui.ts';
-import { getGameObject, isCorrect } from './game.ts';
+import { getGameObject, isCorrect } from './game/game.ts';
 import { showAnswers, clearAnswers } from './ui/answers.ts';
+import { setupDialog } from './game/settings.ts';
+import { fetchDictionary, fetchWordsLists } from './game/data.ts';
 
 async function main() {
-    const dictionary: Word[] = await fetch('/phonetic-quiz/dictionary.json').then(res => res.json());
-    const wordsList: string[] = await fetch('/phonetic-quiz/english-words.json').then(res => res.json());
+    const dictionary: Word[] = await fetchDictionary();
+    const wordsList: string[][] = await fetchWordsLists();
 
     let gameObject: GameObject = getGameObject(dictionary, wordsList);
 
-    const label = document.querySelector('label') as HTMLLabelElement;
-    const input = document.getElementById('input') as HTMLInputElement;
-    const btn = document.querySelector('button') as HTMLButtonElement;
+    const label = document.querySelector('#game label') as HTMLLabelElement;
+    const input = document.querySelector('#game input') as HTMLInputElement;
+    const btn = document.querySelector('#game button') as HTMLButtonElement;
 
-
+    setupDialog();
     setupForm(gameObject, input, label);
 
     let guessing: boolean = true;
-
+    
     btn.addEventListener('click', e => {
         e.preventDefault();
 
@@ -36,6 +38,5 @@ async function main() {
         updateButtonContent(guessing, btn);
     });
 }
-
 
 main();
