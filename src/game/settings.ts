@@ -41,7 +41,7 @@ function updateFrequencies(diff: number, spread: number): void {
 
 export function calcFrequenciesArray(diff: number, spread: number): number[] {
     const arr = [0, 0, 0, 0, 0, 0, 0, 0];
-    return arr.map((x, i) => calcFrequency(i + 1, diff, spread));
+    return arr.map((_x, i) => calcFrequency(i + 1, diff, spread));
 }
 
 function calcFrequency(x: number, center: number, width: number): number {
