@@ -1,11 +1,16 @@
-import { retrieveSliderValues, saveFrequencies, saveInputsValues } from "./data";
+import { setupOpening, setupClosing, fillSliderProgress, showFrequencies } from "../ui/settings";
+import { retrieveSliderValues, saveFrequencies, saveInputValue } from "./data";
 
 export function setupDialog(): void {
     const settingsDialog = document.getElementById('settings') as HTMLDialogElement;
 
     setupDifficultySettings();
+    setupOpening(settingsDialog);
+    setupClosing(settingsDialog);
 
-    settingsDialog.showModal();
+    //remove automatic focus on close button when opening
+    settingsDialog.focus();
+    settingsDialog.blur();
 }
 
 function setupDifficultySettings() {
@@ -21,7 +26,8 @@ function setupDifficultySettings() {
             output.value = target.value;
 
             updateFrequencies(+diffSlider.value, +spreadSlider.value);
-            saveInputsValues(diffSlider, spreadSlider);
+            saveInputValue(slider);
+            fillSliderProgress(slider);
         });
         slider.dispatchEvent(new Event('input'));
     });
@@ -42,9 +48,4 @@ function calcFrequency(x: number, center: number, width: number): number {
     const max = 1;
     const ret = max * (10 ** (-1 * (((x - center) / (width * 1.1))) ** 2));
     return +ret.toFixed(2);
-}
-
-function showFrequencies(freqs: number[]): void {
-    const bars = document.querySelectorAll('#settings__freq__chart div') as NodeList;
-    bars.forEach((bar, i) => (bar as HTMLElement).style.height = `${freqs[i] * 80}px`);
 }

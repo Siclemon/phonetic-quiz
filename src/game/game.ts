@@ -26,7 +26,6 @@ function getWord(dictionary: Word[], wordsList: string[][]): Word {
 function pickRandomWord(wordsList: string[][]): string {
     const frequencies: number[] = retrieveFrequencies();
     const difficulty = weightedRandom(frequencies);
-    console.log(difficulty)
     return randomElement(wordsList[difficulty - 1]);
 }
 

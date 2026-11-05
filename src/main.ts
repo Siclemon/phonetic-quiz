@@ -11,16 +11,15 @@ async function main() {
 
     let gameObject: GameObject = getGameObject(dictionary, wordsList);
 
-    const label = document.querySelector('label') as HTMLLabelElement;
-    const input = document.getElementById('input') as HTMLInputElement;
-    const btn = document.querySelector('button') as HTMLButtonElement;
+    const label = document.querySelector('#game label') as HTMLLabelElement;
+    const input = document.querySelector('#game input') as HTMLInputElement;
+    const btn = document.querySelector('#game button') as HTMLButtonElement;
 
     setupDialog();
     setupForm(gameObject, input, label);
 
     let guessing: boolean = true;
-
-
+    
     btn.addEventListener('click', e => {
         e.preventDefault();
 

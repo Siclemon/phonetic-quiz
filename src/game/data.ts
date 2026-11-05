@@ -6,11 +6,11 @@ export async function fetchDictionary(): Promise<Word[]> {
 }
 
 export async function fetchWordsLists(): Promise<string[][]> {
-    const ret: string[][] = [];
+    const ret: Promise<any>[] = [];
     for (let i = 1; i < 9; i++) {
-        await fetch(`/phonetic-quiz/english-words-${i}.json`).then(res => res.json()).then(data => ret.push(data));
+        ret.push(fetch(`/phonetic-quiz/english-words-${i}.json`).then(res => res.json()));
     }
-    return ret;
+    return Promise.all(ret);
 }
 
 export function retrieveSliderValues(diffSlider: HTMLInputElement, spreadSlider: HTMLInputElement) {
@@ -18,10 +18,8 @@ export function retrieveSliderValues(diffSlider: HTMLInputElement, spreadSlider:
     spreadSlider.value = window.localStorage.getItem(spreadSlider.id) ?? '5';
 }
 
-export function saveInputsValues(...inputs: HTMLInputElement[]) {
-    inputs.forEach(input => {
-        window.localStorage.setItem(input.id, input.value);
-    });
+export function saveInputValue(input: HTMLInputElement) {
+    window.localStorage.setItem(input.id, input.value);
 }
 
 export function saveFrequencies(frequencies: number[]): void {
