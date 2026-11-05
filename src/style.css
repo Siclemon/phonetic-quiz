@@ -78,7 +78,12 @@ body {
 
 			.form__button {
 				border-radius: 50%;
+				height: 2rem;
+				width: 2rem;
 				grid-area: btn;
+				&:hover {
+					cursor: pointer;
+				}
 			}
 		}
 
@@ -125,6 +130,11 @@ body {
 
 					&:has(input[type='checkbox']:checked) {
 						background-color: var(--bg-color) !important;
+					}
+
+					&:hover {
+						cursor: pointer;
+						outline: 1px solid #17173544;
 					}
 				}
 			}
