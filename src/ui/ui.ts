@@ -17,3 +17,14 @@ export function setupForm(gameObject: GameObject, input: HTMLInputElement, label
     input.focus();
     label.textContent = gameObject.pronunciation.ipa;
 }
+
+export function loadingScreen(): void {
+    const loadingDiv = document.getElementById('loading');
+    const panels = document.querySelectorAll('.panel');
+    
+    loadingDiv?.classList.add('loaded');
+    panels.forEach(panel => panel.classList.add('loaded'));
+    setTimeout(() => {
+        document.getElementById('loading')?.remove();
+    }, 500);
+}
