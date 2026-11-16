@@ -2,12 +2,12 @@ import type { Word, GameObject } from '../types/interfaces.ts';
 
 export function showAnswers(gameObject: GameObject) {
     for (const answer of gameObject.words)
-        showAnswer(answer, gameObject.words.indexOf(answer));
+        showAnswer(answer, gameObject.words.indexOf(answer), gameObject.pronunciation.ipa);
     const header = document.querySelector('header.answers__header') as HTMLElement;
     header.textContent = `${gameObject.words.length} answer${gameObject.words.length > 1 ? 's' : ''}:`;
 }
 
-function showAnswer(word: Word, index: number) {
+function showAnswer(word: Word, index: number, pron: string) {
     const art = document.createElement('article') as HTMLElement;
     art.classList.add('paper');
     const header = art.appendChild(document.createElement('header') as HTMLElement);
@@ -15,7 +15,7 @@ function showAnswer(word: Word, index: number) {
 
     art.appendChild(createButtons(index));
     art.appendChild(createMeaningsList(word, index));
-    art.appendChild(createPronunciationsList(word, index));
+    art.appendChild(createPronunciationsList(word, index, pron));
 
     document.querySelector('section')?.appendChild(art);
 }
@@ -32,7 +32,7 @@ function createMeaningsList(word: Word, index: number): HTMLOListElement {
     return ol;
 }
 
-function createPronunciationsList(word: Word, index: number) {
+function createPronunciationsList(word: Word, index: number, givenPronunciation: string) {
     const ol = document.createElement('ol') as HTMLOListElement;
     for (const pron of word.pronunciations) {
         const li = document.createElement('li') as HTMLLIElement;
@@ -47,7 +47,8 @@ function createPronunciationsList(word: Word, index: number) {
                 tagSpan.textContent = tag;
                 lidiv.appendChild(tagSpan);
             }
-        li.appendChild(lidiv)
+        li.classList.toggle('given_pronunciation', givenPronunciation === pron.ipa);
+        li.appendChild(lidiv);
         ol.appendChild(li);
     }
     ol.id = `olP${index}`;
