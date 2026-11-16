@@ -1,61 +1,53 @@
 # phonetic-quiz
 
-Commandes:
+Quiz de phonétique en anglais.
 
-`grep "\"ipa\"" raw-wiktextract-data.jsonl > dico.jsonl`
+Une prononciation est affichée, il faut deviné à quel mot elle correspond.
 
-`grep "\"lang\": \"English\"" dico.jsonl > oui.jsonl`
+### Features :
+- priorisation des prononciations britanniques et nord-américaines
+- accepte tous les homophones
+- affichage des définitions et de toutes les prononciations des réponses acceptées
+- réglage de difficulté, en fonction de la fréquence d'usage des mots
 
+## Commandes de création du dictionnaire :
 
-`jq '.' en.jsonl > en.json`
+À partir des données de Wiktionary : https://kaikki.org/dictionary/rawdata.html.
 
-`jq "[.[]? | {word: .word, meaning: .senses[]?.glosses, ipa: .sounds[]?.ipa}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique, ipa: map(.ipa) | unique | del(.[] | select(. == null or test(\".*-.*\")))})" en.json > dictionary.json`
+### Garde uniquement les entrées avec un champ 'ipa' :
 
+```shell
+grep "\"ipa\"" raw-wiktextract-data.jsonl > dico.jsonl
+```
 
+### Garde les mots anglais : 
+```shell
+grep "\"lang\": \"English\"" dico.jsonl > oui.jsonl
+```
 
-
-# NON
-(retire plein de mots)
-`grep "\"lang_code\": \"en\"}" oui.jsonl > en.jsonl`
-
-
-
-
-
-# oui
-
-jq "[.[]? | {word: .word, meaning: .senses[]?.glosses, ipa: .sounds[]?.ipa}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique, ipa: map(.ipa) | unique | del(.[] | select(. == null or test(\".*-.*\")))})" yes.json > dictionary2.json
-
+### jsonl vers json :
+```shell
 jq -s '.' oui.jsonl > yes.json
+```
 
 
-avec tags de prononciations
-[.[]? | {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique, pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null))})
-
-[.[]? | {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique, pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null)) | unique})
-
-jq "[.[]? | {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique, pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null or (.ipa | test(\".*-.*\")))) | unique})" yes.json > dicotags.json
-
-2823314
-2778811
-
-def unique_unsorted:
-reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
-[.[]? | {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] | group_by(.word) | map({word: .[0].word, meanings: map(.meaning) | flatten | unique_unsorted, pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null or (.ipa | test(".*-.*")))) | unique_unsorted})
-
-def unique_unsorted:
-reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
-[.[]? 
-| {word: .word, meaning: .senses[]?.glosses, pronunciations: .sounds[]?}] 
-| group_by(.word) 
-| map({
-    word: .[0].word, 
-    meanings: map(.meaning) | flatten | unique_unsorted, 
-    pronunciations: map(.pronunciations) | del(.[] | select(.ipa == null or (.ipa | test(".*-.*")))) | unique_unsorted})
-
-
----
-regroupe les prononciations par ipa
+### Formattage complet du dictionnaire :
+Format :
+```json
+[
+    {word: "mot",
+    meanings: [
+        "def 1",
+        "def 2"
+    ],
+    pronunciations : [
+        {ipa: "/ipa/",
+        tags: "Received Pronunciation",
+        note: "rare"}
+    ]}
+]
+```
+Commande (dans un ficheir dicobuilder.jq) :
 ```
 def unique_unsorted:
 reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
@@ -73,4 +65,8 @@ reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
             tags: map(.tags // []) | flatten,
             note: map(.note // []) | flatten})
     })
+```
+Utiliser la commande :
+```shell
+jq -f dicobuilder.jq yes.json > dictionary.json
 ```
