@@ -1,19 +1,21 @@
 import type { Word, GameObject } from './types/interfaces.ts';
-import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm } from './ui/ui.ts';
+import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm, loadingScreen } from './ui/ui.ts';
 import { getGameObject, isCorrect } from './game/game.ts';
 import { showAnswers, clearAnswers } from './ui/answers.ts';
 import { setupDialog } from './game/settings.ts';
 import { fetchDictionary, fetchWordsLists } from './game/data.ts';
 
 async function main() {
-    const dictionary: Word[] = await fetchDictionary();
-    const wordsList: string[][] = await fetchWordsLists();
-
-    let gameObject: GameObject = getGameObject(dictionary, wordsList);
-
     const label = document.querySelector('#game label') as HTMLLabelElement;
     const input = document.querySelector('#game input') as HTMLInputElement;
     const btn = document.querySelector('#game button') as HTMLButtonElement;
+    
+    const dictionary: Word[] = await fetchDictionary();
+    const wordsList: string[][] = await fetchWordsLists();
+    loadingScreen();
+
+    let gameObject: GameObject = getGameObject(dictionary, wordsList);
+
 
     setupDialog();
     setupForm(gameObject, input, label);
