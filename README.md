@@ -34,16 +34,18 @@ jq -s '.' oui.jsonl > yes.json
 ### Formattage complet du dictionnaire :
 Format :
 ```json
-[
-    {word: "mot",
-    meanings: [
+[{
+    "word": "mot",
+    "meanings": [
         "def 1",
         "def 2"
     ],
-    pronunciations : [
-        {ipa: "/ipa/",
-        tags: "Received Pronunciation",
-        note: "rare"}
+    "pronunciations" : [
+        {
+            "ipa": "/ipa/",
+            "tags": "Received Pronunciation",
+            "note": "rare"
+        }
     ]}
 ]
 ```
