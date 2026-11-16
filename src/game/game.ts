@@ -30,13 +30,17 @@ function pickRandomWord(wordsList: string[][]): string {
 }
 
 function selectPronunciation(w: Word): Pronunciation {
-    const mainTags = ['UK', 'US', 'General-American', 'Received-Pronunciation', 'Standard'];
-    const secondarytags = ['Canada', 'Australia', 'British', 'Southern', 'New-Zealand', 'Ireland', 'Scotland', 'Wales', 'Northern-Ireland'];
+    const mainTags = ['General-American', 'Received-Pronunciation'];
+    const secondaryTags = ['UK', 'US', 'Standard'];
+    const otherTags = ['Canada', 'Australia', 'British', 'Southern', 'New-Zealand', 'Ireland', 'Scotland', 'Wales', 'Northern-Ireland'];
 
     const wordMainPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => mainTags.includes(tag)));
     if (wordMainPronunciations.length) return randomElement(wordMainPronunciations);
 
-    const wordOtherPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => secondarytags.includes(tag)) && !wordMainPronunciations.includes(pron));
+    const wordSecondaryPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => secondaryTags.includes(tag)));
+    if (wordSecondaryPronunciations.length) return randomElement(wordSecondaryPronunciations);
+
+    const wordOtherPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => otherTags.includes(tag)));
     if (wordOtherPronunciations.length) return randomElement(wordOtherPronunciations);
 
     const noTags = w.pronunciations.filter(pron => !pron.tags);
