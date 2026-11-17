@@ -4,6 +4,11 @@ export function answerFeedback(correct: boolean, input: HTMLInputElement): void 
     input.classList = 'form__input ' + (correct ? 'correct' : 'incorrect');
 }
 
+export function resetAnswerFeedback(input: HTMLInputElement): void {
+    input.classList.remove('correct');
+    input.classList.remove('incorrect');
+}
+
 export function updateButtonContent(guessing: boolean, btn: HTMLButtonElement): void {
     btn.textContent = guessing ? '🪶' : '➡️';
 }
