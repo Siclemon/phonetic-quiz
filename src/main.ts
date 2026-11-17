@@ -1,5 +1,5 @@
 import type { Word, GameObject } from './types/interfaces.ts';
-import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm, loadingScreen } from './ui/ui.ts';
+import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm, loadingScreen, resetAnswerFeedback } from './ui/ui.ts';
 import { getGameObject, isCorrect } from './game/game.ts';
 import { showAnswers, clearAnswers } from './ui/answers.ts';
 import { setupDialog } from './game/settings.ts';
@@ -33,6 +33,7 @@ async function main() {
             gameObject = getGameObject(dictionary, wordsList);
         } else {
             setupForm(gameObject, input, label);
+            resetAnswerFeedback(input);
             clearAnswers();
         }
 
