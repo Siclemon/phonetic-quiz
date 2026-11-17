@@ -448,11 +448,9 @@ body {
 }
 
 @keyframes loading {
-
 	50% {
 		left: calc(var(--bar-container-width) - var(--bar-width) / 2);
 	}
-
 }
 
 .panel {

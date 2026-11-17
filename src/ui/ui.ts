@@ -30,6 +30,10 @@ export function loadingScreen(): void {
     loadingDiv?.classList.add('loaded');
     panels.forEach(panel => panel.classList.add('loaded'));
     setTimeout(() => {
-        document.getElementById('loading')?.remove();
+        loadingDiv?.remove();
     }, 500);
+    setTimeout(() => {
+        panels[0]?.remove();
+        panels[1]?.remove();
+    }, 1000);
 }
