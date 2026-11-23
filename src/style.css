@@ -9,9 +9,10 @@
 }
 
 :root {
-	--bg-color: oklch(0.89 0.02 81.33);
-	--txt-color: oklch(0.22 0.05 280.8);
-	--surface-color: oklch(0.93 0 0);
+	--bg-color: #E2DACC;
+	--txt-color: #171731;
+	--surface-color: #EBE9E7;
+	--accent-color: #92374D;
 	--font: charis, serif;
 }
 
@@ -120,7 +121,7 @@ body {
 				justify-content: space-around;
 
 				label {
-					background-color: oklch(0.89 0 0) !important;
+					background-color: var(--bg-color) !important;
 					border-radius: 50px;
 					padding: 3px 0 3px 8px;
 					user-select: none;
@@ -130,7 +131,8 @@ body {
 					}
 
 					&:has(input[type='checkbox']:checked) {
-						background-color: var(--bg-color) !important;
+						background-color: var(--accent-color) !important;
+						color: var(--surface-color);
 					}
 
 					&:hover {
