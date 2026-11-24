@@ -1,11 +1,13 @@
 @font-face {
 	font-family: charis;
 	src: url(./assets/fonts/CharisSIL-Regular.ttf);
+	font-display: swap;
 }
 
 @font-face {
 	font-family: charis boldita;
 	src: url(./assets/fonts/CharisSIL-BoldItalic.ttf);
+	font-display: swap;
 }
 
 :root {
@@ -13,14 +15,13 @@
 	--txt-color: #171731;
 	--surface-color: #EBE9E7;
 	--accent-color: #92374D;
+	--correct-color: #30812a;
+	--incorrect-color: #c5383b;
 	--font: charis, serif;
 }
 
 .paper {
-	background: url('./assets/paper.png') 0 0;
-	/* background-blend-mode: hard-light; */
-	/* background-blend-mode:lighten; */
-	background-blend-mode: color-burn;
+	background: url('./assets/paper-3.png') 0 0;
 }
 
 body {
@@ -64,11 +65,11 @@ body {
 				padding: 2px 3px;
 
 				&.correct {
-					border-color: oklch(55% 0.14 142.5);
+					border-color: var(--correct-color);
 				}
 
 				&.incorrect {
-					border-color: oklch(55% 0.14 22);
+					border-color: var(--incorrect-color);
 				}
 
 				&:focus {
@@ -132,12 +133,12 @@ body {
 
 					&:has(input[type='checkbox']:checked) {
 						background-color: var(--accent-color) !important;
-						color: var(--surface-color);
+						color: var(--bg-color);
 					}
 
 					&:hover {
 						cursor: pointer;
-						outline: 1px solid #17173544;
+						outline: 1px solid color-mix(in oklab, var(--txt-color) 25%, transparent);
 					}
 				}
 			}
@@ -220,12 +221,12 @@ body {
 				&:hover,
 				&:active {
 					text-shadow: 1px 1px 1px #0004;
-					color: oklch(0.4 0.12 23);
+					color: var(--accent-color);
 				}
 
 				&:focus-visible {
 					outline: none;
-					text-shadow: 1px 1px oklch(60% 0.28 257 / 0.45), -1px 1px oklch(60% 0.28 257 / 0.45), 1px -1px oklch(60% 0.28 257 / 0.45), -1px -1px oklch(60% 0.28 257 / 0.45);
+					text-shadow: 1px 1px var(--accent-color), -1px 1px var(--accent-color), 1px -1px var(--accent-color), -1px -1px var(--accent-color);
 				}
 			}
 		}
@@ -249,7 +250,7 @@ body {
 				--track-color: var(--surface-color);
 				--progress-color: var(--txt-color);
 				--thumb-color: var(--txt-color);
-				--focus-color: rgba(0, 122, 255, 0.45);
+				--focus-color: var(--accent-color);
 
 				-webkit-appearance: none;
 				appearance: none;
@@ -395,7 +396,7 @@ body {
 
 			&:hover {
 				path:nth-child(3) {
-					fill: oklch(.4 .15 20);
+					fill: var(--accent-color);
 				}
 			}
 		}

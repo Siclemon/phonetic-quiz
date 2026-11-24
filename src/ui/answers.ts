@@ -9,7 +9,7 @@ export function showAnswers(gameObject: GameObject) {
 
 function showAnswer(word: Word, index: number, pron: string) {
     const art = document.createElement('article') as HTMLElement;
-    art.classList.add('paper');
+    // art.classList.add('paper');
     const header = art.appendChild(document.createElement('header') as HTMLElement);
     header.textContent = word.word;
 
@@ -70,7 +70,7 @@ function createButton(type: string, index: number): HTMLLabelElement {
     const label = document.createElement('label') as HTMLLabelElement;
     label.htmlFor = `${type}-${index}`;
     label.textContent = type;
-    label.classList.add('paper');
+    // label.classList.add('paper');
     const inp = document.createElement('input') as HTMLInputElement;
     inp.type = 'checkbox';
     inp.id = `${type}-${index}`;
