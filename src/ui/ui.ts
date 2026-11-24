@@ -23,7 +23,7 @@ export function setupForm(gameObject: GameObject, input: HTMLInputElement, label
     label.textContent = gameObject.pronunciation.ipa;
 }
 
-export function loadingScreen(): void {
+export function endLoadingScreen(): void {
     const loadingDiv = document.getElementById('loading');
     const panels = document.querySelectorAll('.panel');
     

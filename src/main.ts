@@ -1,8 +1,8 @@
 import type { Word, GameObject } from './types/interfaces.ts';
-import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm, loadingScreen, resetAnswerFeedback } from './ui/ui.ts';
+import { answerFeedback, updateButtonContent, showFirstMeanings, setupForm, endLoadingScreen, resetAnswerFeedback } from './ui/ui.ts';
 import { getGameObject, isCorrect } from './game/game.ts';
 import { showAnswers, clearAnswers } from './ui/answers.ts';
-import { setupDialog } from './game/settings.ts';
+import { setupSettingsDialog } from './game/settings.ts';
 import { fetchDictionary, fetchWordsLists } from './game/data.ts';
 
 async function main() {
@@ -12,12 +12,11 @@ async function main() {
     
     const dictionary: Word[] = await fetchDictionary();
     const wordsList: string[][] = await fetchWordsLists();
-    loadingScreen();
+    endLoadingScreen();
 
     let gameObject: GameObject = getGameObject(dictionary, wordsList);
 
-
-    setupDialog();
+    setupSettingsDialog();
     setupForm(gameObject, input, label);
 
     let guessing: boolean = true;

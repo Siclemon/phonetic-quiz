@@ -1,11 +1,10 @@
-export function setupOpening(dialog: HTMLDialogElement): void {
-    document.getElementById('open_settings')?.addEventListener('click', () => dialog.showModal());
+export function setupOpening(dialog: HTMLDialogElement, button: HTMLButtonElement): void {
+    button.addEventListener('click', () => dialog.showModal());
 }
 
-export function setupClosing(dialog: HTMLDialogElement): void {
-    const btn = document.getElementById('settings__close_button') as HTMLButtonElement;
-    btn.addEventListener('click', () => {
-        dialog.close();
+export function setupClosing(dialog: HTMLDialogElement, button: HTMLButtonElement, animation: boolean): void {
+    button.addEventListener('click', () => {
+        closeDialog(dialog, animation);
     });
     dialog.addEventListener('click', e => {
         if (e.target !== dialog) return;
@@ -18,7 +17,20 @@ export function setupClosing(dialog: HTMLDialogElement): void {
             e.clientX <= rect.right
         );
 
-        if (!clickedInDialog) dialog.close();
+        if (!clickedInDialog) closeDialog(dialog, animation);
+    });
+}
+
+function closeDialog(dialog: HTMLDialogElement, animation: boolean): void {
+    if (!animation) {
+        dialog.close();
+        return;
+    }
+    console.log('cca')
+    dialog.classList.add('fadeOut');
+    Promise.allSettled(dialog.getAnimations().map(anim => anim.finished)).then(() => {
+        dialog.classList.remove('fadeOut');
+        dialog.close();
     });
 }
 

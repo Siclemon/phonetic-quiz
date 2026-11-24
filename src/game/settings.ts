@@ -1,12 +1,32 @@
 import { setupOpening, setupClosing, fillSliderProgress, showFrequencies } from "../ui/settings";
 import { retrieveSliderValues, saveFrequencies, saveInputValue } from "./data";
 
-export function setupDialog(): void {
-    const settingsDialog = document.getElementById('settings') as HTMLDialogElement;
+export function setupSettingsDialog(): void {
+    const openButton = document.getElementById('open_settings') as HTMLButtonElement;
+    const closeButton = document.getElementById('close_settings') as HTMLButtonElement;
+    const isMobile = window.matchMedia("(max-width: 600px)").matches;
+
+    let settingsDialog: HTMLDialogElement;
+    if (isMobile) {
+        settingsDialog = document.getElementById('mobile-settings') as HTMLDialogElement;
+        const mobileDialogs = document.querySelectorAll('.mobile-setting-subdialog') as NodeListOf<HTMLDialogElement>;
+
+        for (const dial of mobileDialogs) {
+            const id = dial.id.split('-')[0];
+            const btn = document.getElementById(`btn-${id}`) as HTMLButtonElement;
+            setupOpening(dial, btn);
+            const back = dial.querySelector('.settings__back') as HTMLButtonElement;
+            setupClosing(dial, back, true);
+        }
+
+    }
+    else {
+        settingsDialog = document.getElementById('desktop-settings') as HTMLDialogElement;
+    }
 
     setupDifficultySettings();
-    setupOpening(settingsDialog);
-    setupClosing(settingsDialog);
+    setupOpening(settingsDialog, openButton);
+    setupClosing(settingsDialog, closeButton, isMobile);
 
     //remove automatic focus on close button when opening
     settingsDialog.focus();

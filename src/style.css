@@ -24,9 +24,67 @@
 	background: url('./assets/paper-3.png') 0 0;
 }
 
-body {
-	color: var(--txt-color);
+body,
+input,
+button {
 	font-family: var(--font);
+	color: var(--txt-color);
+}
+
+button {
+	cursor: pointer;
+}
+
+.mobile-btn {
+	display: block;
+	height: 3.7rem;
+	font-size: 1.5rem;
+	width: 90%;
+	margin: 10px auto;
+	font-weight: 700;
+	text-align: left;
+	padding-left: 20px;
+	background-color: var(--surface-color);
+	color: var(--txt-color);
+	border: none;
+	border-radius: 10px;
+	position: relative;
+	overflow: hidden;
+	--dash-color: color-mix(in oklch, var(--txt-color) 35%, var(--surface-color));
+
+	&::before,
+	&::after {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+	}
+
+	&::before {
+		background:
+			linear-gradient(to right, var(--dash-color) 11px, transparent 11px) 0 2px repeat-x,
+			linear-gradient(to right, var(--dash-color) 11px, transparent 11px) 0 calc(100% - 2px) repeat-x;
+		background-size: 20px 1px;
+	}
+
+	&::after {
+		background:
+			linear-gradient(to bottom, var(--dash-color) 11px, transparent 11px) 2px 0px repeat-y,
+			linear-gradient(to bottom, var(--dash-color) 11px, transparent 11px) calc(100% - 2px) 0px repeat-y;
+		background-size: 1px 20px;
+	}
+
+	&.dark {
+		background-color: var(--txt-color);
+		color: var(--surface-color);
+		--dash-color: color-mix(in oklch, var(--txt-color) 65%, var(--surface-color));
+	}
+}
+
+body {
 	background-color: var(--bg-color) !important;
 	margin: 0;
 
@@ -174,207 +232,217 @@ body {
 		}
 	}
 
-	#settings {
+	#mobile-settings {
+		margin-bottom: -5px;
+		width: 100%;
 		background-color: var(--bg-color);
-		box-sizing: border-box;
-		border: solid 4px var(--bg-color);
 		border-radius: 3px;
-		box-shadow: inset 0 0 0 4px #171735cc, 1px 2px 5px 2px #0004;
-		min-width: 310px;
-		width: 35vw;
-		max-width: 500px;
-		min-height: 390px;
+		border: solid 3px var(--bg-color);
+		box-shadow: inset 0 0 0 3px var(--txt-color);
+		padding: 4px 16px 48px;
 
 		&::backdrop {
 			background-color: #0004;
 			backdrop-filter: blur(1px);
 		}
 
-		header {
+		#close_settings {
+			width: 50px;
+			height: 30px;
+			margin: auto;
+			display: grid;
+			place-items: center;
+			background: none;
+			border: none;
+			margin-bottom: 40px;
+
+			svg {
+				fill: var(--txt-color);
+				transform: rotate(90deg) scaleX(0.8);
+			}
+		}
+	}
+
+	#difficulty-dialog {
+		background-color: var(--bg-color);
+		margin-bottom: -5px;
+		width: 100%;
+		border-radius: 3px;
+		border: solid 3px var(--bg-color);
+		box-shadow: inset 0 0 0 3px var(--txt-color);
+
+		.header {
 			position: relative;
 			background-color: var(--surface-color);
 			border: solid 2px var(--surface-color);
 			box-shadow: inset 0 0 0 1.5px var(--txt-color);
 			margin-bottom: 30px;
+			width: 90%;
+			margin: 1rem auto;
 
 			h2 {
 				text-align: center;
 				font-weight: 600;
 				margin: 0;
 			}
-
-			button {
-				position: absolute;
-				right: 20px;
-				top: 45%;
-				transform: translateY(-50%);
-				background: none;
-				border: none;
-				font-family: var(--font);
-				font-size: 32px;
-				font-weight: 800;
-				height: 32px;
-				line-height: 1;
-				cursor: pointer;
-				color: var(--txt-color);
-
-				&:hover,
-				&:active {
-					text-shadow: 1px 1px 1px #0004;
-					color: var(--accent-color);
-				}
-
-				&:focus-visible {
-					outline: none;
-					text-shadow: 1px 1px var(--accent-color), -1px 1px var(--accent-color), 1px -1px var(--accent-color), -1px -1px var(--accent-color);
-				}
-			}
 		}
 
-		label {
-			width: 100%;
-			margin: auto;
-			margin-bottom: 4px;
+		.dialog-content {
+			width: 90%;
+			margin: 0 auto 40px;
 
-			span {
-				text-decoration: underline;
-			}
-
-			output {}
-
-			/* reset the browser look */
-			.slider {
-				--track-height: 9px;
-				--thumb-size: 18px;
-				--thumb-border: 2px;
-				--track-color: var(--surface-color);
-				--progress-color: var(--txt-color);
-				--thumb-color: var(--txt-color);
-				--focus-color: var(--accent-color);
-
-				-webkit-appearance: none;
-				appearance: none;
+			label {
+				width: 95%;
 				display: block;
-				width: 80%;
-				max-width: 100%;
-				height: var(--thumb-size);
-				min-height: 20px;
-				margin: 0;
-				background: transparent;
-				cursor: pointer;
 				margin: auto;
-				margin-top: 3px;
+				margin-bottom: 4px;
 
-				&:hover,
-				&:active {
-					--thumb-size: 20px;
+				span {
+					text-decoration: underline;
 				}
-			}
 
-			.slider:focus {
-				outline: none;
-			}
+				output {}
 
-			/* Chrome, Edge, Safari */
-			.slider::-webkit-slider-runnable-track {
-				box-sizing: border-box;
-				height: var(--track-height);
-				background: linear-gradient(to right, var(--progress-color) calc(var(--thumb-size) / 2 + (100% - var(--thumb-size)) * var(--range-progress, 0)), var(--track-color) 0);
-				border: 0;
-				border-radius: 21px;
-			}
+				/* reset the browser look */
+				.slider {
+					--track-height: 9px;
+					--thumb-size: 18px;
+					--thumb-border: 2px;
+					--track-color: var(--surface-color);
+					--progress-color: color-mix(in oklch, var(--accent-color) 90%, black);
+					--thumb-color: var(--accent-color);
+					--focus-color: var(--accent-color);
 
-			.slider::-webkit-slider-thumb {
-				-webkit-appearance: none;
-				appearance: none;
-				box-sizing: border-box;
-				width: var(--thumb-size);
-				height: var(--thumb-size);
-				margin-top: -4px;
-				/* centres the thumb on the track */
-				background: var(--thumb-color);
-				border: var(--thumb-border) solid var(--track-color);
-				border-radius: 50%;
-				box-shadow: 0 0 1px 1px #0004;
-			}
+					-webkit-appearance: none;
+					appearance: none;
+					display: block;
+					width: 80%;
+					max-width: 100%;
+					height: var(--thumb-size);
+					min-height: 20px;
+					margin: 0;
+					background: transparent;
+					cursor: pointer;
+					margin: auto;
+					margin-top: 3px;
 
-			.slider:focus-visible::-webkit-slider-thumb {
-				box-shadow: 0 0 0 3px var(--focus-color);
-			}
-
-			/* Firefox */
-			.slider::-moz-range-track {
-				box-sizing: border-box;
-				height: var(--track-height);
-				background: var(--track-color);
-				border: 0;
-				border-radius: 21px;
-			}
-
-			/* Firefox fills the track itself, no script needed */
-			.slider::-moz-range-progress {
-				height: var(--track-height);
-				background: var(--progress-color);
-				border-radius: 21px;
-			}
-
-			.slider::-moz-range-thumb {
-				box-sizing: border-box;
-				width: var(--thumb-size);
-				height: var(--thumb-size);
-				background: var(--thumb-color);
-				border: var(--thumb-border) solid var(--track-color);
-				border-radius: 50%;
-				box-shadow: 0 0 1px 1px #0004;
-			}
-
-			.slider:focus-visible::-moz-range-thumb {
-				box-shadow: 0 0 0 3px var(--focus-color);
-			}
-
-		}
-
-
-		figure {
-			width: 100%;
-			margin: 0;
-			margin-bottom: 20px;
-
-			figcaption {
-				text-align: center;
-				margin-top: 35px;
-				margin-bottom: -30px;
-				font-size: 16px;
-			}
-
-			#settings__freq__chart {
-				width: 90%;
-				display: flex;
-				align-items: end;
-				border: 1px solid var(--txt-color);
-				padding: 45px 3px 0;
-				gap: 3px;
-				margin: 0 auto 10px;
-				border-radius: 3px;
-				background-color: var(--surface-color);
-
-
-				div {
-					height: 0;
-					width: calc((100% - 21px) / 8);
-					background-color: var(--txt-color);
-					/* background-color: var(--txt-color); */
-					text-align: center;
-					display: flex;
-					flex-direction: column-reverse;
-
-					span {
-						margin-bottom: -25px;
+					&:hover,
+					&:active {
+						--thumb-size: 20px;
 					}
 				}
 
+				.slider:focus {
+					outline: none;
+				}
+
+				/* Chrome, Edge, Safari */
+				.slider::-webkit-slider-runnable-track {
+					box-sizing: border-box;
+					height: var(--track-height);
+					background: linear-gradient(to right, var(--progress-color) calc(var(--thumb-size) / 2 + (100% - var(--thumb-size)) * var(--range-progress, 0)), var(--track-color) 0);
+					border: 0;
+					border-radius: 21px;
+				}
+
+				.slider::-webkit-slider-thumb {
+					-webkit-appearance: none;
+					appearance: none;
+					box-sizing: border-box;
+					width: var(--thumb-size);
+					height: var(--thumb-size);
+					margin-top: -4px;
+					/* centres the thumb on the track */
+					background: var(--thumb-color);
+					border: var(--thumb-border) solid var(--track-color);
+					border-radius: 50%;
+					box-shadow: 0 0 1px 1px #0004;
+				}
+
+				.slider:focus-visible::-webkit-slider-thumb {
+					box-shadow: 0 0 0 3px var(--focus-color);
+				}
+
+				/* Firefox */
+				.slider::-moz-range-track {
+					box-sizing: border-box;
+					height: var(--track-height);
+					background: var(--track-color);
+					border: 0;
+					border-radius: 21px;
+				}
+
+				/* Firefox fills the track itself, no script needed */
+				.slider::-moz-range-progress {
+					height: var(--track-height);
+					background: var(--progress-color);
+					border-radius: 21px;
+				}
+
+				.slider::-moz-range-thumb {
+					box-sizing: border-box;
+					width: var(--thumb-size);
+					height: var(--thumb-size);
+					background: var(--thumb-color);
+					border: var(--thumb-border) solid var(--track-color);
+					border-radius: 50%;
+					box-shadow: 0 0 1px 1px #0004;
+				}
+
+				.slider:focus-visible::-moz-range-thumb {
+					box-shadow: 0 0 0 3px var(--focus-color);
+				}
+
+			}
+
+
+			figure {
+				width: 100%;
+				margin: 0;
+				margin-bottom: 20px;
+
+				figcaption {
+					text-align: center;
+					margin-top: 25px;
+					margin-bottom: -30px;
+					font-size: 16px;
+				}
+
+				#settings__freq__chart {
+					width: 100%;
+					display: flex;
+					align-items: end;
+					border: 1px solid var(--txt-color);
+					padding: 45px 3px 0;
+					gap: 3px;
+					margin: 0 auto 10px;
+					border-radius: 3px;
+					background-color: var(--surface-color);
+
+
+					div {
+						height: 0;
+						width: calc((100% - 21px) / 8);
+						background-color: var(--txt-color);
+						/* background-color: var(--txt-color); */
+						text-align: center;
+						display: flex;
+						flex-direction: column-reverse;
+
+						span {
+							margin-bottom: -25px;
+						}
+					}
+
+				}
 			}
 		}
+
+		.settings__back {
+			text-align: center;
+			padding: 0;
+		}
+
 	}
 
 	aside {
@@ -400,6 +468,38 @@ body {
 				}
 			}
 		}
+	}
+}
+
+dialog[open] {
+	animation: dialogFadeIn 0.15s ease-out;
+}
+
+dialog.fadeOut {
+	animation: dialogFadeOut 0.15s ease-in;
+}
+
+@keyframes dialogFadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(40px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes dialogFadeOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	to {
+		opacity: 0;
+		transform: translateY(40px);
 	}
 }
 
@@ -491,6 +591,7 @@ body {
 @media (min-width:768px) {
 	#loading {
 		font-size: 1.6rem;
+
 		#loading-bar {
 			height: 7px;
 		}
