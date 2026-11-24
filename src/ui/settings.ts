@@ -44,3 +44,7 @@ export function fillSliderProgress(slider: HTMLInputElement): void {
     const max = slider.max === '' ? 100 : +slider.max;
     slider.style.setProperty('--range-progress', (+slider.value - min) / (max - min) + '');
 }
+
+export function createDialectsLabels(dialects: string[]): NodeListOf<HTMLInputElement> {
+
+}

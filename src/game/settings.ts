@@ -1,4 +1,4 @@
-import { setupOpening, setupClosing, fillSliderProgress, showFrequencies } from "../ui/settings";
+import { setupOpening, setupClosing, fillSliderProgress, showFrequencies, createDialectsLabels } from "../ui/settings";
 import { retrieveSliderValues, saveFrequencies, saveInputValue } from "./data";
 
 export function setupSettingsDialog(): void {
@@ -31,6 +31,10 @@ export function setupSettingsDialog(): void {
     //remove automatic focus on close button when opening
     settingsDialog.focus();
     settingsDialog.blur();
+}
+
+function setupPreferencesSettings(): void {
+    createDialectsLabels();
 }
 
 function setupDifficultySettings() {
