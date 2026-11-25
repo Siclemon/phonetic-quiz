@@ -29,3 +29,17 @@ export function saveFrequencies(frequencies: number[]): void {
 export function retrieveFrequencies(): number[] {
     return JSON.parse(window.localStorage.getItem('frequencies') ?? 'null') || calcFrequenciesArray(2, 5);
 }
+
+export const DIALECTS: string[] = ['Received-Pronunciation', 'General-American', 'UK', 'US', 'Standard', 'Canada', 'Australia', 'British', 'Southern', 'New-Zealand', 'Ireland', 'Scotland', 'Wales', 'Northern-Ireland', 'Untagged'];
+
+export function savePreferredTags(tags: string[]): void {
+    window.localStorage.setItem('preferredTags', JSON.stringify(tags));
+}
+
+export function retrievePreferredTags(): string[] {
+    const data = JSON.parse(window.localStorage.getItem('preferredTags') ?? 'null');
+    if (data && data.length) return data;
+    const DEFAULT_DIALECTS: string[] = ['Received-Pronunciation', 'General-American', 'UK', 'US', 'Untagged'];
+    savePreferredTags(DEFAULT_DIALECTS);
+    return DEFAULT_DIALECTS;
+}

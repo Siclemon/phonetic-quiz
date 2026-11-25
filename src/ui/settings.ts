@@ -45,6 +45,26 @@ export function fillSliderProgress(slider: HTMLInputElement): void {
     slider.style.setProperty('--range-progress', (+slider.value - min) / (max - min) + '');
 }
 
-export function createDialectsLabels(dialects: string[]): NodeListOf<HTMLInputElement> {
+export function createDialectsInputs(dialects: string[]): HTMLInputElement[] {
+    const list: HTMLInputElement[] = [];
+    const containerDiv = document.getElementById('dialects-list') as HTMLDivElement;
 
+    for (const tag of dialects) {
+        list.push(createDialectInput(tag, containerDiv));
+    }
+    return list;
+}
+
+function createDialectInput(tag: string, container: HTMLDivElement): HTMLInputElement {
+    const id = tag.replaceAll(' ','_');
+    const label: HTMLLabelElement = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = tag;
+    const input: HTMLInputElement = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = id;
+    label.appendChild(input);
+    
+    container.append(label);
+    return input;
 }

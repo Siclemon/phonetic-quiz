@@ -1,5 +1,5 @@
-import { setupOpening, setupClosing, fillSliderProgress, showFrequencies, createDialectsLabels } from "../ui/settings";
-import { retrieveSliderValues, saveFrequencies, saveInputValue } from "./data";
+import { setupOpening, setupClosing, fillSliderProgress, showFrequencies, createDialectsInputs } from "../ui/settings";
+import { DIALECTS, retrievePreferredTags, retrieveSliderValues, saveFrequencies, saveInputValue, savePreferredTags } from "./data";
 
 export function setupSettingsDialog(): void {
     const openButton = document.getElementById('open_settings') as HTMLButtonElement;
@@ -18,7 +18,7 @@ export function setupSettingsDialog(): void {
             const back = dial.querySelector('.settings__back') as HTMLButtonElement;
             setupClosing(dial, back, true);
         }
-
+        setupPreferencesSettings()
     }
     else {
         settingsDialog = document.getElementById('desktop-settings') as HTMLDialogElement;
@@ -34,7 +34,19 @@ export function setupSettingsDialog(): void {
 }
 
 function setupPreferencesSettings(): void {
-    createDialectsLabels();
+    const inputs: HTMLInputElement[] = createDialectsInputs(DIALECTS);
+    for (const input of inputs) {
+        const preferredTags = retrievePreferredTags();
+        input.checked = preferredTags.includes(input.id);
+
+        input.addEventListener('click', () => {
+            const tags: string[] = [];
+            for (const input of inputs) {
+                if (input.checked) tags.push(input.id);
+            }
+            savePreferredTags(tags);
+        });
+    }
 }
 
 function setupDifficultySettings() {

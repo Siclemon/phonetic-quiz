@@ -1,5 +1,5 @@
 import type { Pronunciation, Word, GameObject } from '../types/interfaces.ts';
-import { retrieveFrequencies } from '../game/data.ts';
+import { retrieveFrequencies, retrievePreferredTags } from '../game/data.ts';
 
 export function getGameObject(dictionary: Word[], wordsList: string[][]): GameObject {
 
@@ -16,9 +16,11 @@ export function getGameObject(dictionary: Word[], wordsList: string[][]): GameOb
 
 function getWord(dictionary: Word[], wordsList: string[][]): Word {
     let wordObject: Word | undefined;
+    const preferredTags: string[] = retrievePreferredTags();
     while (!wordObject) {
         const wordString = pickRandomWord(wordsList);
         wordObject = dictionary.find(w => w.word === wordString);
+        if (preferredTags.length > 0 && !wordObject?.pronunciations.some(pron => pron.tags?.some(tag => preferredTags.includes(tag)) || (!pron.tags || pron.tags.length === 0) && preferredTags.includes('Untagged'))) wordObject = undefined;
     }
     return wordObject;
 }
@@ -29,28 +31,23 @@ function pickRandomWord(wordsList: string[][]): string {
     return randomElement(wordsList[difficulty - 1]);
 }
 
-function selectPronunciation(w: Word): Pronunciation {
-    const mainTags = ['General-American', 'Received-Pronunciation'];
-    const secondaryTags = ['UK', 'US', 'Standard'];
-    const otherTags = ['Canada', 'Australia', 'British', 'Southern', 'New-Zealand', 'Ireland', 'Scotland', 'Wales', 'Northern-Ireland'];
+function selectPronunciation(word: Word): Pronunciation {
+    const preferredTags: string[] = retrievePreferredTags();
 
-    const wordMainPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => mainTags.includes(tag)));
-    if (wordMainPronunciations.length) return randomElement(wordMainPronunciations);
+    const preferredWords = word.pronunciations.filter(pron => pron.tags?.some(tag => preferredTags.includes(tag)));
+    if (preferredWords.length) return randomElement(preferredWords);
 
-    const wordSecondaryPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => secondaryTags.includes(tag)));
-    if (wordSecondaryPronunciations.length) return randomElement(wordSecondaryPronunciations);
+    if (preferredTags.includes('Untagged')) {
+        const noTags = word.pronunciations.filter(pron => !pron.tags || pron.tags.length === 0);
+        if (noTags.length) return randomElement(noTags);
+    }
 
-    const wordOtherPronunciations = w.pronunciations.filter(pron => pron.tags?.some(tag => otherTags.includes(tag)));
-    if (wordOtherPronunciations.length) return randomElement(wordOtherPronunciations);
-
-    const noTags = w.pronunciations.filter(pron => !pron.tags);
-    if (noTags.length) return randomElement(noTags);
-
-    return randomElement(w.pronunciations);
+    return randomElement(word.pronunciations);
 }
 
 function getHomophones(ipa: string, dictionary: Word[]): Word[] {
-    return dictionary.filter(w => w.pronunciations.some(pron => pron.ipa === ipa));
+    const preferredTags: string[] = retrievePreferredTags();
+    return dictionary.filter(w => w.pronunciations.some(pron => pron.ipa === ipa && (pron.tags?.some(tag => preferredTags.includes(tag)) || (!pron.tags || pron.tags.length === 0) && preferredTags.includes('Untagged'))));
 }
 
 export function randomElement<T>(arr: T[]) {
