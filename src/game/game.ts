@@ -20,7 +20,7 @@ function getWord(dictionary: Word[], wordsList: string[][]): Word {
     while (!wordObject) {
         const wordString = pickRandomWord(wordsList);
         wordObject = dictionary.find(w => w.word === wordString);
-        if (preferredTags.length > 0 && !wordObject?.pronunciations.some(pron => pron.tags?.some(tag => preferredTags.includes(tag)) || (!pron.tags || pron.tags.length === 0) && preferredTags.includes('Untagged'))) wordObject = undefined;
+        if (preferredTags.length > 0 && !wordObject?.pronunciations.some(pron => isPreferred(pron, preferredTags))) wordObject = undefined;
     }
     return wordObject;
 }
@@ -38,8 +38,8 @@ function selectPronunciation(word: Word): Pronunciation {
     if (preferredWords.length) return randomElement(preferredWords);
 
     if (preferredTags.includes('Untagged')) {
-        const noTags = word.pronunciations.filter(pron => !pron.tags || pron.tags.length === 0);
-        if (noTags.length) return randomElement(noTags);
+        const untagged = word.pronunciations.filter(pron => isUntagged(pron));
+        if (untagged.length) return randomElement(untagged);
     }
 
     return randomElement(word.pronunciations);
@@ -47,7 +47,7 @@ function selectPronunciation(word: Word): Pronunciation {
 
 function getHomophones(ipa: string, dictionary: Word[]): Word[] {
     const preferredTags: string[] = retrievePreferredTags();
-    return dictionary.filter(w => w.pronunciations.some(pron => pron.ipa === ipa && (pron.tags?.some(tag => preferredTags.includes(tag)) || (!pron.tags || pron.tags.length === 0) && preferredTags.includes('Untagged'))));
+    return dictionary.filter(w => w.pronunciations.some(pron => pron.ipa === ipa && isPreferred(pron, preferredTags)));
 }
 
 export function randomElement<T>(arr: T[]) {
@@ -62,4 +62,18 @@ function weightedRandom(frequencies: number[]): number {
 export function isCorrect(gameObject: GameObject, input: string): boolean {
     input = input.trim().toLowerCase();
     return gameObject.words.some(w => w.word === input);
+}
+
+function isUntagged(pron: Pronunciation): boolean {
+    return !pron.tags || pron.tags.length === 0;
+}
+
+function wantsUntagged(preferredTags: string[]): boolean {
+    return preferredTags.includes('Untagged');
+}
+
+function isPreferred(pron: Pronunciation, preferredTags: string[]): boolean {
+    if (preferredTags.length === 0) return true;
+    if (isUntagged(pron)) return wantsUntagged(preferredTags);
+    return pron.tags!.some(tag => preferredTags.includes(tag));
 }

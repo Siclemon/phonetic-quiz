@@ -38,7 +38,7 @@ export function savePreferredTags(tags: string[]): void {
 
 export function retrievePreferredTags(): string[] {
     const data = JSON.parse(window.localStorage.getItem('preferredTags') ?? 'null');
-    if (data && data.length) return data;
+    if (data) return data;
     const DEFAULT_DIALECTS: string[] = ['Received-Pronunciation', 'General-American', 'UK', 'US', 'Untagged'];
     savePreferredTags(DEFAULT_DIALECTS);
     return DEFAULT_DIALECTS;
