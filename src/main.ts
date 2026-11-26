@@ -14,7 +14,7 @@ async function main() {
     const wordsList: string[][] = await fetchWordsLists();
     endLoadingScreen();
 
-    // (document.getElementById('preferences-dialog') as HTMLDialogElement).showModal()
+    // (document.getElementById('dialog-preferences') as HTMLDialogElement).showModal()
 
     let gameObject: GameObject = getGameObject(dictionary, wordsList);
 

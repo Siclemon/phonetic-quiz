@@ -3,16 +3,16 @@ import { DIALECTS, retrievePreferredTags, retrieveSliderValues, saveFrequencies,
 
 export function setupSettingsDialog(): void {
     const openButton = document.getElementById('open_settings') as HTMLButtonElement;
-    const closeButton = document.getElementById('close_settings') as HTMLButtonElement;
+    const closeButton = document.getElementById('settings-close') as HTMLButtonElement;
     const isMobile = window.matchMedia("(max-width: 600px)").matches;
 
     let settingsDialog: HTMLDialogElement;
     if (isMobile) {
         settingsDialog = document.getElementById('mobile-settings') as HTMLDialogElement;
-        const mobileDialogs = document.querySelectorAll('.mobile-setting-subdialog') as NodeListOf<HTMLDialogElement>;
+        const mobileDialogs = document.querySelectorAll('.dialog--sub') as NodeListOf<HTMLDialogElement>;
 
         for (const dial of mobileDialogs) {
-            const id = dial.id.split('-')[0];
+            const id = dial.id.split('-')[1];
             const btn = document.getElementById(`btn-${id}`) as HTMLButtonElement;
             setupOpening(dial, btn);
             const back = dial.querySelector('.settings__back') as HTMLButtonElement;
@@ -50,15 +50,16 @@ function setupPreferencesSettings(): void {
 }
 
 function setupDifficultySettings() {
-    const diffSlider = document.getElementById('settings__diff') as HTMLInputElement;
-    const spreadSlider = document.getElementById('settings__spread') as HTMLInputElement;
+    const diffSlider = document.getElementById('peak__input') as HTMLInputElement;
+    const spreadSlider = document.getElementById('variety__input') as HTMLInputElement;
 
     retrieveSliderValues(diffSlider, spreadSlider);
 
     [diffSlider, spreadSlider].forEach(slider => {
         slider.addEventListener('input', e => {
             const target: HTMLInputElement = e.target as HTMLInputElement;
-            const output: HTMLOutputElement = document.getElementById(`${target.id}__output`) as HTMLOutputElement;
+            const id = target.id.slice(0,-7);
+            const output: HTMLOutputElement = document.getElementById(`${id}__output`) as HTMLOutputElement;
             output.value = target.value;
 
             updateFrequencies(+diffSlider.value, +spreadSlider.value);

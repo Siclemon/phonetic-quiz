@@ -26,7 +26,6 @@ function closeDialog(dialog: HTMLDialogElement, animation: boolean): void {
         dialog.close();
         return;
     }
-    console.log('cca')
     dialog.classList.add('fadeOut');
     Promise.allSettled(dialog.getAnimations().map(anim => anim.finished)).then(() => {
         dialog.classList.remove('fadeOut');
@@ -35,7 +34,7 @@ function closeDialog(dialog: HTMLDialogElement, animation: boolean): void {
 }
 
 export function showFrequencies(freqs: number[]): void {
-    const bars = document.querySelectorAll('#settings__freq__chart div') as NodeList;
+    const bars = document.querySelectorAll('#difficulty__chart div') as NodeList;
     bars.forEach((bar, i) => (bar as HTMLElement).style.height = `${freqs[i] * 80}px`);
 }
 
@@ -56,7 +55,7 @@ export function createDialectsInputs(dialects: string[]): HTMLInputElement[] {
 }
 
 function createDialectInput(tag: string, container: HTMLDivElement): HTMLInputElement {
-    const id = tag.replaceAll(' ','_');
+    const id = tag.replaceAll(' ', '_');
     const label: HTMLLabelElement = document.createElement('label');
     label.htmlFor = id;
     label.textContent = tag;
@@ -64,7 +63,7 @@ function createDialectInput(tag: string, container: HTMLDivElement): HTMLInputEl
     input.type = 'checkbox';
     input.id = id;
     label.appendChild(input);
-    
+
     container.append(label);
     return input;
 }
