@@ -1,5 +1,7 @@
-export function setupOpening(dialog: HTMLDialogElement, button: HTMLButtonElement): void {
-    button.addEventListener('click', () => dialog.showModal());
+export function setupOpening(dialog: HTMLDialogElement, button: HTMLButtonElement): () => void {
+    const openDialog = () => dialog.showModal();
+    button.addEventListener('click', openDialog);
+    return () => button.removeEventListener('click', openDialog);
 }
 
 export function setupClosing(dialog: HTMLDialogElement, button: HTMLButtonElement, animation: boolean): void {
@@ -66,4 +68,50 @@ function createDialectInput(tag: string, container: HTMLDivElement): HTMLInputEl
 
     container.append(label);
     return input;
+}
+
+export function moveContent(isMobile: boolean): void {
+    if (isMobile) moveContentMobile();
+    else moveContentDesktop();
+}
+
+function moveContentMobile(): void {
+    const keys = ['difficulty', 'preferences'];
+    for (const key of keys) {
+        document.querySelector(`#dialog-${key} .header`)?.after(document.querySelector(`section.${key}`) as HTMLDivElement);
+    }
+}
+
+function moveContentDesktop(): void {
+    const destination = document.querySelector('#desktop-settings .dialog__container') as HTMLDivElement;
+    const contentSections = document.querySelectorAll('section.dialog__content') as NodeListOf<HTMLDivElement>;
+    for (const sect of contentSections) {
+        destination.appendChild(sect);
+    }
+    if (![...contentSections].some(sect => [...sect.classList].includes('active'))) {
+        document.querySelector('.difficulty')?.classList.add('active');
+        document.getElementById('btn-difficulty-desktop')?.classList.add('active');
+    }
+}
+
+export function setupDesktopTab(dial: HTMLDialogElement): void {
+    const buttons = dial.querySelectorAll('.settings__btn') as NodeListOf<HTMLButtonElement>;
+    const contents = document.querySelectorAll('section.dialog__content') as NodeListOf<HTMLDivElement>;
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+        for (const sect of contents) {
+            sect.classList.toggle('active', [...sect.classList].includes(btn.id.split('-')[1]));
+        }
+        for (const button of buttons) button.classList.toggle('active', button === btn);
+    }));
+}
+
+export function setupMobileSubdialogs(): void {
+    const mobileDialogs = document.querySelectorAll('.dialog--sub') as NodeListOf<HTMLDialogElement>;
+    for (const dial of mobileDialogs) {
+        const id = dial.id.split('-')[1];
+        const btn = document.getElementById(`btn-${id}-mobile`) as HTMLButtonElement;
+        setupOpening(dial, btn);
+        const back = dial.querySelector('.settings__back') as HTMLButtonElement;
+        setupClosing(dial, back, true);
+    }
 }

@@ -42,7 +42,7 @@
     <div id="panel-l" class="panel paper"></div>
     <div id="panel-r" class="panel paper"></div>
     <dialog id="mobile-settings" class="dialog--mobile">
-        <button id="settings-close"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+        <button id="mobile-settings-close"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="-18.534299999999998 -18.534299999999998 222.4116 222.4116" xml:space="preserve" fill="#000000"
                 stroke="#000000" stroke-width="0.00185343">
@@ -53,54 +53,86 @@
                     d="M51.707,185.343c-2.741,0-5.493-1.044-7.593-3.149c-4.194-4.194-4.194-10.981,0-15.175 l74.352-74.347L44.114,18.32c-4.194-4.194-4.194-10.987,0-15.175c4.194-4.194,10.987-4.194,15.18,0l81.934,81.934 c4.194,4.194,4.194,10.987,0,15.175l-81.934,81.939C57.201,184.293,54.454,185.343,51.707,185.343z">
                 </path>
             </svg></button>
-        <button class="settings__btn mobile-btn" id="btn-difficulty">Difficulty</button>
-        <button class="settings__btn mobile-btn" id="btn-preferences">Preferences</button>
-        <button class="settings__btn mobile-btn" id="btn-appearance">Appearance</button>
+        <button class="settings__btn button--mobile" id="btn-difficulty-mobile">Difficulty</button>
+        <button class="settings__btn button--mobile" id="btn-preferences-mobile">Preferences</button>
+        <button class="settings__btn button--mobile" id="btn-appearance-mobile">Appearance</button>
     </dialog>
     <dialog id="dialog-difficulty" class="dialog--mobile dialog--sub">
         <div class="header">
             <h2>Difficulty</h2>
         </div>
-        <section class="dialog__content difficulty">
-            <label for="peak__input">
-                <span>Difficulty:</span>
-                <output for="peak__input" id="peak__output"></output>
-                <input type="range" id="peak__input" min="1" max="8" step="1" value="2" class="slider">
-            </label>
-            <label for="variety__input">
-                <span>Variety:</span>
-                <output for="variety__input" id="variety__output"></output>
-                <input type="range" id="variety__input" min="1" max="8" step="1" value="3" class="slider">
-            </label>
-            <figure>
-                <figcaption>Difficulty distribution</figcaption>
-                <output id="difficulty__chart">
-                    <div><span>1</span></div>
-                    <div><span>2</span></div>
-                    <div><span>3</span></div>
-                    <div><span>4</span></div>
-                    <div><span>5</span></div>
-                    <div><span>6</span></div>
-                    <div><span>7</span></div>
-                    <div><span>8</span></div>
-                </output>
-            </figure>
-        </section>
-        <button class="settings__back mobile-btn dark">Back</button>
+        <div class="dialog__container">
+            <section class="dialog__content difficulty">
+                <label for="peak__input">
+                    <span class="label">Difficulty:</span>
+                    <output for="peak__input" id="peak__output"></output>
+                    <input type="range" id="peak__input" min="1" max="8" step="1" value="2" class="slider">
+                </label>
+                <label for="variety__input">
+                    <span class="label">Variety:</span>
+                    <output for="variety__input" id="variety__output"></output>
+                    <input type="range" id="variety__input" min="1" max="8" step="1" value="3" class="slider">
+                </label>
+                <figure>
+                    <figcaption>Difficulty distribution</figcaption>
+                    <output id="difficulty__chart">
+                        <div><span>1</span></div>
+                        <div><span>2</span></div>
+                        <div><span>3</span></div>
+                        <div><span>4</span></div>
+                        <div><span>5</span></div>
+                        <div><span>6</span></div>
+                        <div><span>7</span></div>
+                        <div><span>8</span></div>
+                    </output>
+                </figure>
+            </section>
+        </div>
+        <button class="settings__back button--mobile dark">Back</button>
     </dialog>
     <dialog id="dialog-preferences" class="dialog--mobile dialog--sub">
         <div class="header">
             <h2>Preferences</h2>
         </div>
-        <section class="dialog__content preferences-content">
-            <span class="pref-span">Preferred Dialects:</span>
-            <div id="dialects-list" class="dialects">
-            </div>
-            <button id="untagged-tooltip">What is untagged?</button>
-        </section>
-        <button class="settings__back mobile-btn dark">Back</button>
+        <div class="dialog__container">
+            <section class="dialog__content preferences">
+                <span class="label">Preferred Dialects:</span>
+                <div id="dialects-list" class="dialects">
+                </div>
+                <button id="untagged-tooltip">What is untagged?</button>
+            </section>
+        </div>
+        <button class="settings__back button--mobile dark">Back</button>
     </dialog>
-    <dialog id="desktop-settings"></dialog>
+    <dialog id="desktop-settings" class="dialog--desktop">
+        <div class="settings__wrapper">
+            <div class="settings__icon">
+                <svg height="200px" width="200px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
+                    fill="#000000">
+                    <path class="st0"
+                        d="M511.414,217.728c-1.902-9.034-8.242-16.503-16.852-19.856l-30.197-11.736v31.046l5.718,2.223 c2.58,1.008,4.483,3.25,5.048,5.953c0.565,2.712-0.263,5.538-2.223,7.497L279.14,426.609c-3.834,3.824-9.561,5.03-14.62,3.071 l-43.064-16.748v31.046l30.226,11.755c17.18,6.678,36.678,2.581,49.715-10.454l202.594-202.59 C510.519,236.161,513.317,226.77,511.414,217.728z">
+                    </path>
+                    <path class="st0"
+                        d="M30.914,299.684c1.356-18.895,7.423-43.649,28.466-42.481l192.2,74.751 c17.228,6.698,36.782,2.553,49.818-10.558l185.771-186.991c6.5-6.538,9.269-15.919,7.357-24.933 c-1.912-9.023-8.242-16.474-16.832-19.809L286.666,15.374c-17.228-6.698-36.791-2.553-49.818,10.559L21.646,242.538 C4.625,256.545,0,282.664,0,305.863c0,23.2,1.545,51.043,27.844,61.866l-6.198-1.451l57.942,22.532v-20.742 c0-3.372,0.42-6.668,1.107-9.88l-38.94-15.147C29.37,338.35,29.36,321.499,30.914,299.684z">
+                    </path>
+                    <path class="st0"
+                        d="M111.048,352.658c-4.088,4.107-6.381,9.645-6.381,15.41v96.076l40.823-8.741l50.888,44.383v-96.048 c0-5.793,2.298-11.331,6.386-15.419l16.272-16.276l-91.706-35.662L111.048,352.658z">
+                    </path>
+                </svg>
+            </div>
+            <div class="header">
+                <h2>Options</h2>
+                <button id="desktop-settings-close">X</button>
+            </div>
+            <div class="settings__nav">
+                <button class="settings__btn active" id="btn-difficulty-desktop">Difficulty</button>
+                <button class="settings__btn" id="btn-preferences-desktop">Preferences</button>
+                <button class="settings__btn" id="btn-appearance-desktop">Appearance</button>
+            </div>
+            <div class="dialog__container"></div>
+        </div>
+    </dialog>
 </body>
 
 </html>
